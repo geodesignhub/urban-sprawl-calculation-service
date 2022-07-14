@@ -1,0 +1,404 @@
+---
+openapi: "3.0.3"
+info:
+  title: "Urban Sprawl Calculation Service"
+  description: |-
+    This service uses the QGIS plugin created by Ryan Horiguchi and Joël Schwab (Schwab and Horiguchi, 2020), applying the mathematical theory developed (Jaeger and Schwick, 2014) to calculate the Weighted Urban Proliferation (WUP) urban sprawl metric, and its components: degree of urban dispersion (DIS) and Land Uptake per Person (LUP). 
+    
+    These metrics are calculated against the the Global Human Settlement Layers (GHSL, 2018). The ability to apply the plugin seamlessly to these layers would eventually allow for the fast calculation of WUP and its components for nearly anywhere globally.
+
+    Unless otherwise specified, fields specified in a message but not declared in the API shall be ignored.
+  version: "0.0.1"
+ 
+security:
+- Authority:
+  - usl.write
+  - usl.read
+  
+tags:
+- name: WUP calculation
+  description: |-
+    Endpoints exposed by the server implementing the WUP calculation service. As a part of WUP calculations, degree of urban dispersion (DIS) and land up-take per person (LUP) is also provided. The boundary is represented as a Polygon and the Raster against which the sprawl metrics are computed.
+    
+
+components:
+  securitySchemes:
+    Authority:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://token_vendor.com/oauth/token
+          scopes:
+            utm.negotiation: |-
+              Client may perform negotiations and other related activities.
+
+      description: |-
+        Authorization from, or on behalf of, an authorization authority. This authority shall issue access tokens that are JSON Web Tokens as defined in RFC 7519, using the `RS256` algorithm for the signature, publish to all providers the public key for verifying that signature, and implement standard OAuth server discovery mechanisms as described in RFC 8414.
+        The following fields shall be included in the JWT claim for access tokens issued by this authority:
+        * `iss`, with the URL at which the token generation request was received.
+        * `exp`, with a time no further than 1 hour in the future.
+        * `sub`, with unique ID of the client requesting the access token.
+        * `scope`, with a string composed of a space-separated list of strings indicating the scopes granted, per RFC 6749.
+        * `jti`, according to RFC 7519.
+
+        Clients shall provide these access tokens in an `Authorization` header in the form `Bearer <token>` in accordance with RFC 6750.
+
+  schemas:
+  
+    UUIDv4Format:
+      description: >-
+        String whose format matches a version-4 UUID according to RFC 4122.
+      maxLength: 36
+      minLength: 36
+      type: string
+      format: uuid
+      pattern: >-
+        ^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-4[0-9a-fA-F]{3}\\-[8-b][0-9a-fA-F]{3}\\-[0-9a-fA-F]{12}$
+      example: 03e5572a-f733-49af-bc14-8a18bd53ee39
+      
+    Time:
+      required:
+      - value
+      - format
+      type: object
+      properties:
+        value:
+          type: string
+          description: RFC3339-formatted time/date string.  The time zone must be
+            'Z'.
+          format: date-time
+          example: '1985-04-12T23:20:50.52Z'
+        format:
+          type: string
+          enum:
+          - RFC3339
+    Latitude:
+      description: >-
+        Degrees of latitude north of the equator, with reference to the WGS84
+        ellipsoid.
+      maximum: 90
+      exclusiveMaximum: false
+      minimum: -90
+      exclusiveMinimum: false
+      type: number
+      format: double
+      example: 34.123
+    Longitude:
+      description: >-
+        Degrees of longitude east of the Prime Meridian, with reference to the
+        WGS84 ellipsoid.
+      minimum: -180
+      exclusiveMaximum: false
+      maximum: 180
+      exclusiveMinimum: false
+      type: number
+      format: double
+      example: -118.456
+    Polygon:
+      description: >-
+        An enclosed area on the earth. The bounding edges of this polygon are
+        defined to be the shortest paths between connected vertices.  This
+        means, for instance, that the edge between two points both defined at a
+        particular latitude is not generally contained at that latitude. The
+        winding order must be interpreted as the order which produces the
+        smaller area. The path between two vertices is defined to be the
+        shortest possible path between those vertices. Edges may not cross.
+        Vertices may not be duplicated.  In particular, the final polygon vertex
+        must not be identical to the first vertex.
+      required:
+      - vertices
+      type: object
+      properties:
+        vertices:
+          minItems: 3
+          type: array
+          items:
+            $ref: '#/components/schemas/LatLngPoint'
+    LatLngPoint:
+      description: Point on the earth's surface.
+      required:
+      - lat
+      - lng
+      type: object
+      properties:
+        lng:
+          $ref: '#/components/schemas/Longitude'
+        lat:
+          $ref: '#/components/schemas/Latitude'
+
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    
+    Standard500ErrorResponse:
+      description: An unexpected error occured.
+      $ref: '#/components/schemas/Error'
+      
+
+    BadRequest400ErrorResponse:
+      description: The JSON is not valid
+      $ref: '#/components/schemas/Error'
+
+    Unauthorized401ErrorResponse:
+      description: The request requires an user authentication
+      $ref: '#/components/schemas/Error'
+
+    Forbidden403ErrorResponse:
+      description: the access is not allowed
+
+      $ref: '#/components/schemas/Error'
+
+    Forbidden404ErrorResponse:
+      description: The endpoint is not valid
+      $ref: '#/components/schemas/Error'
+
+    WUPCalculationStartRequest:
+      description: Start a WUP processing computation 
+      required:
+      - resident_count_in_boundary
+      - employment_count_in_boundary
+      - raster_with_build_up_area
+      - raster_no_data_value
+      - raster_build_up_value
+      - vector_boundary
+      type: object
+      properties:
+        resident_count_in_boundary:
+          type: integer
+          example: 24000
+          description: |-
+            Enter the expected number of residents in the vector boundary provided            
+        employment_count_in_boundary:
+          type: integer
+          example: 24000
+          description: |-
+            Enter the expected number of employees in the vector boundary provided
+        raster_with_build_up_area:
+          type: string
+          format: url
+          description: The URL at which the the raster with build up / non-build up values shall be downloaded from.
+          example: https://datastore.example.com/ghsl.tiff
+        raster_no_data_value:
+          type: integer
+          enum: [0]
+          example: 0
+          description: |-
+            Enter the `nodata` value in the Raster, expected 0
+        raster_build_up_value:
+          type: integer
+          enum: [1]
+          example: 1
+          description: |-
+            Enter the build up value in the raster, normally 1, see the documentation regarding representing built up / non-built up areas in a raster
+        vector_boundary:
+          $ref: '#/components/schemas/Polygon'
+
+
+    WUPCalculationResult:
+      description: Result of WUP calculation request
+      required:
+      - dis
+      - lup
+      - wup
+      type: object
+      properties:
+        dis:
+          type: number
+          format: float
+          example: 46.68
+          description: |-
+            DIS measures the settlement pattern within the reporting unit and considers the fact that urban sprawl increases with both increased urban area and increased dispersion of buildings (Jaeger and Schwick, 2014).         
+
+        lup:
+          type: number
+          format: float
+          example: 437.36
+          description: |-
+            The Utilisation Density (UD) considers population and employment within the reporting unit and thus gives an indication of land utilisation. An area with high UD, such as the inner city, will contribute less to urban sprawl than an area with low UD, such as rural or suburban areas. This makes sense as urban sprawl occurs on the periphery of cities where urban settlements encroach onto natural landscapes rather than in already urbanised city centres with high land utilization densities. Land Uptake per Person (LUP) was calculated instead of UD. LUP can be seen as the inverse of UD, in that higher LUP values contribute to higher WUP values.    
+        wup:
+          type: number
+          format: float
+          example: 6.99
+          description: |-
+            WUP is a more comprehensive measurement of urban sprawl than other unidimensional metrics as it incorporates a value for each dimension of sprawl, i.e. dispersion and proportion of urban area land utility. 
+            
+
+    WUPCalculationRequestActivating:
+      type: object
+      description: |-
+        The server is processing the request and is currently downloading the raster dataset
+      properties:
+        status:
+          type: string
+          enum:
+          - Activating
+        processing_id:
+          $ref: '#/components/schemas/UUIDv4Format'
+          description: The processing ID must be provided at the time of submission of a request
+
+
+    WUPCalculationRequestProcessing:
+      type: object
+      description: |-
+        The server has successfully downloaded the raster dataset and has started the processing of WUP index
+      properties:
+        status:
+          type: string
+          enum:
+          - Processing
+        processing_id:
+          $ref: '#/components/schemas/UUIDv4Format'
+          description: The processing ID must be provided at the time of submission of a request
+
+
+    WUPCalculationRequestCompleted:
+      type: object
+      description: |-
+        The server has completed the processing of the request and the results are available.
+      properties:
+        status:
+          type: string
+          enum:
+          - Completed
+        processing_id:
+          $ref: '#/components/schemas/UUIDv4Format'
+          description: The processing ID must be provided at the time of submission of a request
+        result:               
+          $ref: '#/components/schemas/WUPCalculationResult'
+
+
+    WUPCalculationRequestRejected:
+      type: object
+      description: |-
+        The server has downloaded the raster dataset but the processing request was rejected because the dataset is invalid.
+      properties:
+        status:
+          type: string
+          enum:
+          - Rejected
+        processing_id:
+          $ref: '#/components/schemas/UUIDv4Format'
+          description: The processing ID must be provided at the time of submission of a request
+
+
+    WUPCalculationRequestError:
+      type: object
+      description: |-
+        The dataset acitvation and processsing is not complete. 
+      properties:
+        status:
+          type: string
+          enum:
+          - Error
+        processing_id:
+          $ref: '#/components/schemas/UUIDv4Format'
+          description: The processing ID must be provided at the time of submission of a request
+
+
+    WUPCalculationRequestState:
+      oneOf:
+        - $ref: '#/components/schemas/WUPCalculationRequestActivating'
+        - $ref: '#/components/schemas/WUPCalculationRequestProcessing'
+        - $ref: '#/components/schemas/WUPCalculationRequestCompleted'
+        - $ref: '#/components/schemas/WUPCalculationRequestRejected'
+        - $ref: '#/components/schemas/WUPCalculationRequestError'
+
+      description: |-
+        A USS must provide a status of the negotiation session
+
+    WUPCalculationRequestStatus:
+      description: |-
+            The status of the WUP index calculation request.
+
+            - `Activating`: the server is processing the request and is currently downloading the raster dataset.
+
+            - `Processing`: the server has successfully downloaded the raster dataset and has started the processing of the index.
+            
+            - `Completed`: the server has completed the processing of the request and the results are available.
+            
+            - `Rejected`: the server has downloaded the raster dataset but the processing request was rejected because the dataset is invalid.
+            
+            - `Error`: the dataset acitvation and processsing is not complete. The description field is required in this case.
+
+      type: object
+      $ref: '#/components/schemas/WUPCalculationRequestState'
+      
+
+paths:
+
+  /v1/wup_index:
+    summary: Start a WUP index calculation processing request 
+    put:
+      security:
+        - AuthFromPassport: [usl.write]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WUPCalculationStartRequest'
+        required: true
+      tags:
+      - WUP calculation
+      summary: Start a WUP index cacluation processing request
+      operationId: startWUPCalculationProcessing
+      description: |-
+        The server will start a processing request against the vector boundary provided. 
+      responses:
+        '200':
+          description: "WUP index calculation request received and successsfully processed"
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/WUPCalculationRequestActivating'
+          
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest400ErrorResponse'
+          description: |-
+            * One or more input parameters were missing or invalid.
+            * The request attempted to provide values that are missing or invalid
+
+  /v1/wup_index/{processing_id}:
+    summary: A endpoint to see results of a index calculation processing request
+    
+    parameters:
+    - name: processing_id
+      description: ID of a processing request
+      schema:
+        $ref: '#/components/schemas/UUIDv4Format'
+      in: path
+      required: true
+
+    get:
+      security:
+        - AuthFromPassport: [usl.read]
+      tags:
+      - WUP calculation
+      summary: Get details of an existing processing request
+      operationId: getWUPProcessingRequestStatus
+      description: |-
+        Once a request to calculate WUP has been submitted, use this endpoint to query the status of your request, depending on the dataset it may take for a few minutes longer than 10 -20 minutes for processsing the request.  
+        
+      responses:
+        '200':
+          description: "Processing status retrieved successfully"
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/WUPCalculationRequestStatus'
+
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest400ErrorResponse'
+          description: |-
+            * The processing id parameter provided were missing or invalid
