@@ -336,7 +336,7 @@ paths:
     summary: Start a WUP index calculation processing request 
     put:
       security:
-        - AuthFromPassport: [usl.write]
+        - Authority: [usl.write]
       requestBody:
         content:
           application/json:
@@ -379,7 +379,7 @@ paths:
 
     get:
       security:
-        - AuthFromPassport: [usl.read]
+        - Authority: [usl.read]
       tags:
       - WUP calculation
       summary: Get details of an existing processing request
