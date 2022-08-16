@@ -182,7 +182,7 @@ components:
         raster_with_build_up_area:
           type: string
           format: url
-          description: The URL at which the the raster with build up / non-build up values shall be downloaded from.
+          description: The public URL at which the the raster with build up / non-build up values shall be downloaded from. 
           example: https://datastore.example.com/ghsl.tiff
         raster_no_data_value:
           type: integer
