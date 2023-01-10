@@ -3,6 +3,6 @@ from . import views
 
 #Url for endpoint1 and endpoint2
 urlpatterns = [
-    path('endpoint1/',endpoint1, name='endpoint1'),
-    path('endpoint2/',endpoint2, name='endpoint2'),
+    path('v1/wup_index>',endpoint1, name='endpoint1'),
+    path('v1/wup_index/<processing_index>',endpoint2, name='endpoint2'),
 ]
