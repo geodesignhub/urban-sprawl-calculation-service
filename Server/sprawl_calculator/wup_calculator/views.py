@@ -9,5 +9,5 @@ def index_generator(request):
 
 #Endpoint2_View
 @api_view(['GET'])
-def index_calculation_result(request,processing_id):
+def index_calculation_status(request,processing_id):
     raise NotImplementedError
