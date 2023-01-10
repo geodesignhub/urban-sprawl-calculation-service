@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 
 #Endpoint1_View
 @api_view(['PUT', 'GET'])
-def index_generator(request):
+def wup_index_generator(request):
     raise NotImplementedError
 
 #Endpoint2_View
