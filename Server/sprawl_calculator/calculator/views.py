@@ -4,10 +4,10 @@ from rest_framework.decorators import api_view
 
 #Endpoint1_View
 @api_view(['PUT', 'GET'])
-def endpoint1(request):
+def index_generator(request):
     raise NotImplementedError
 
 #Endpoint2_View
-@api_view(['PUT', 'GET'])
-def endpoint1(request):
+@api_view(['GET'])
+def index_calculation_result(request,processing_id):
     raise NotImplementedError
