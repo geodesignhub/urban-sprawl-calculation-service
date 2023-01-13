@@ -132,17 +132,16 @@ components:
         - message
       properties:
         code:
-          type: string
+          type: integer
         message:
           type: string
     
     Standard500ErrorResponse:
       description: An unexpected error occured.
       $ref: '#/components/schemas/Error'
-      
 
     BadRequest400ErrorResponse:
-      description: The JSON is not valid
+      description: The JSON provided in request body is not valid or the data coupld not be processed
       $ref: '#/components/schemas/Error'
 
     Unauthorized401ErrorResponse:
@@ -159,7 +158,7 @@ components:
       $ref: '#/components/schemas/Error'
 
     WUPCalculationStartRequest:
-      description: Start a WUP processing computation 
+      description: Start a WUP processing computation on the server
       required:
       - resident_count_in_boundary
       - employment_count_in_boundary
