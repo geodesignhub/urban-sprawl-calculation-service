@@ -4,7 +4,7 @@ from django.db import models
 
 class WUPCalculation(models.Model):
     uuid = models.UUIDField(max_length=36, min_length=36, format='uuid', default=uuid.uuid4, unique=True)
-    Status = models.CharField(
+    status = models.CharField(
         max_length=255,
         choices=[
             ('Activating', 'Activating'),
@@ -15,4 +15,5 @@ class WUPCalculation(models.Model):
         ],
         default='Activating'
     )
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
