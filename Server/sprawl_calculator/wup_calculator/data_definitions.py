@@ -15,3 +15,8 @@ class WUPCalculationRequestProcessing:
 class WUPCalculationRequestCompleted:
 	status: str
 	processing_id: str
+
+@dataclass
+class WUPCalculationRequestRejected:
+	status: str
+	processing_id: str
