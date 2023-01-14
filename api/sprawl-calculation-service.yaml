@@ -240,6 +240,13 @@ components:
         processing_id:
           $ref: '#/components/schemas/UUIDv4Format'
           description: The processing ID must be provided at the time of submission of a request
+        created_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time this job was created
+        updated_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time the status of this job as last updated
+        
 
 
     WUPCalculationRequestProcessing:
@@ -254,6 +261,12 @@ components:
         processing_id:
           $ref: '#/components/schemas/UUIDv4Format'
           description: The processing ID must be provided at the time of submission of a request
+        created_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time this job was created
+        updated_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time the status of this job as last updated
 
 
     WUPCalculationRequestCompleted:
@@ -270,6 +283,12 @@ components:
           description: The processing ID must be provided at the time of submission of a request
         result:               
           $ref: '#/components/schemas/WUPCalculationResult'
+        created_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time this job was created
+        updated_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time the status of this job as last updated
 
 
     WUPCalculationRequestRejected:
@@ -284,6 +303,12 @@ components:
         processing_id:
           $ref: '#/components/schemas/UUIDv4Format'
           description: The processing ID must be provided at the time of submission of a request
+        created_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time this job was created
+        updated_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time the status of this job as last updated
 
 
     WUPCalculationRequestError:
@@ -298,6 +323,12 @@ components:
         processing_id:
           $ref: '#/components/schemas/UUIDv4Format'
           description: The processing ID must be provided at the time of submission of a request
+        created_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time this job was created
+        updated_at: 
+          $ref: '#/components/schemas/Time'
+          description: The time the status of this job as last updated
 
 
     WUPCalculationRequestState:
