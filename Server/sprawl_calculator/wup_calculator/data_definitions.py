@@ -20,3 +20,8 @@ class WUPCalculationRequestCompleted:
 class WUPCalculationRequestRejected:
 	status: str
 	processing_id: str
+
+@dataclass
+class WUPCalculationRequestError:
+	status: str
+	processing_id: str
