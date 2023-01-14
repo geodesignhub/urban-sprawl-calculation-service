@@ -10,3 +10,8 @@ class WUPCalculationRequestActivating:
 class WUPCalculationRequestProcessing:
 	status: str
 	processing_id: str
+
+@dataclass
+class WUPCalculationRequestCompleted:
+	status: str
+	processing_id: str
