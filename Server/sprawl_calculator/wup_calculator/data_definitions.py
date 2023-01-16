@@ -19,7 +19,7 @@ class WUPCalculationRequestProcessing:
 class WUPCalculationRequestCompleted:
 	status: str
 	processing_id: str
-	result: float
+	result: WUPCalculationResult
 	created_at: datetime
 	updated_at: datetime
 	
