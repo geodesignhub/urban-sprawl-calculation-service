@@ -1,5 +1,10 @@
 from dataclasses import dataclass
 
+@dataclass
+class WUPCalculationResult:
+	dis: float
+	lup: float
+	wup: float
 
 @dataclass
 class WUPCalculationRequestActivating:
