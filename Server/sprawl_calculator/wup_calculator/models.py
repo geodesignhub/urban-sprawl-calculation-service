@@ -5,12 +5,15 @@ import uuid
 
 class WUPCalculation(models.Model):
     uuid = models.UUIDField(max_length=36, min_length=36, format='uuid', default=uuid.uuid4, unique=True)
-    resident_count_in_boundary = models.IntegerField()
-    employment_count_in_boundary = models.IntegerField()
-    raster_with_build_up_area = models.URLField()
-    raster_no_data_value = models.IntegerField()
-    raster_build_up_value = models.IntegerField()
-    vector_boundary = models.PolygonField()
+    dis = models.DecimalField(default=0.0)
+    lup = models.DecimalField(default=0.0)
+    wup = models.DecimalField(default=0.0)
+    resident_count_in_boundary = models.IntegerField(default=0, help_text="Enter the expected number of residents in the vector boundary provided.")
+    employment_count_in_boundary = models.IntegerField(default=0, help_text="Enter the expected number of employees in the vector boundary provided.")
+    raster_with_build_up_area = models.URLField(help_text="The public URL at which the the raster with build up / non-build up values shall be downloaded from.")
+    raster_no_data_value = models.IntegerField(default=0 help_text="Enter the `nodata` value in the Raster, expected 0.")
+    raster_build_up_value = models.IntegerField(default=1, help_text="Enter the build up value in the raster, normally 1, see the documentation regarding representing built up / non-built up areas in a raster.")
+    vector_boundary = models.JSONField(help_text="Enter the boundary in GeoJSON format")
     status = models.CharField(
         max_length=255,
         choices=[
