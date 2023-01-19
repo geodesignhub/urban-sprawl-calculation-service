@@ -4,7 +4,7 @@ import uuid
 # Create your models here.
 
 class WUPCalculation(models.Model):
-    uuid = models.UUIDField(max_length=36, min_length=36, format='uuid', default=uuid.uuid4, unique=True)
+    processing_id = models.UUIDField(max_length=36, min_length=36, format='uuid', default=uuid.uuid4, unique=True)
     dis = models.DecimalField(default=0.0)
     lup = models.DecimalField(default=0.0)
     wup = models.DecimalField(default=0.0)
