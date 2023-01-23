@@ -46,8 +46,8 @@ class WUPCalculationRequestError:
 @dataclass
 class WUPIndexGeneratorRequest:
 	resident_count_in_boundary: int
-    employment_count_in_boundary: int
-    raster_with_build_up_area: str
-    raster_no_data_value: int
-    vector_boundary: str
+	employment_count_in_boundary: int
+	raster_with_build_up_area: str
+	raster_no_data_value: int
+	vector_boundary: str
 

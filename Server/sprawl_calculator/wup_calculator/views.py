@@ -6,7 +6,7 @@ from datetime import datetime
 from dataclasses import asdict
 from .models import WUPCalculation
 from django.http import JsonResponse
-from .data_definations import WUPCalculationResult, WUPCalculationRequestActivating, WUPCalculationRequestProcessing, WUPCalculationRequestCompleted, WUPCalculationRequestRejected, WUPCalculationRequestError
+from .data_definations import WUPCalculationResult, WUPCalculationRequestActivating, WUPCalculationRequestProcessing, WUPCalculationRequestCompleted, WUPCalculationRequestRejected, WUPCalculationRequestError, WUPIndexGeneratorRequest
 # Create your views here.
 
 
@@ -14,12 +14,8 @@ from .data_definations import WUPCalculationResult, WUPCalculationRequestActivat
 
 @api_view(['PUT', 'GET'])
 def wup_index_generator(request):
-    if request.data.get('resident_count_in_boundary') is None or 
-        request.data.get('employment_count_in_boundary') is None or 
-        request.data.get('raster_with_build_up_area') is None or 
-        request.data.get('raster_no_data_value') is None or 
-        request.data.get('raster_build_up_value') is None or 
-        request.data.get('vector_boundary') is None:
+    request_data = WUPIndexGeneratorRequest.from_dict(request.data)
+    if not request_data.is_valid():
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
