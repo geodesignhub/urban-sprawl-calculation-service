@@ -14,7 +14,14 @@ from .data_definations import WUPCalculationResult, WUPCalculationRequestActivat
 
 @api_view(['PUT', 'GET'])
 def wup_index_generator(request):
-    raise NotImplementedError
+    if request.data.get('resident_count_in_boundary') is None or 
+        request.data.get('employment_count_in_boundary') is None or 
+        request.data.get('raster_with_build_up_area') is None or 
+        request.data.get('raster_no_data_value') is None or 
+        request.data.get('raster_build_up_value') is None or 
+        request.data.get('vector_boundary') is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 """ A endpoint to see results of a index calculation processing request """
 
