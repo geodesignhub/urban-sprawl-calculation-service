@@ -12,7 +12,7 @@ from .data_definations import WUPCalculationResult, WUPCalculationRequestActivat
 
 """ Start a WUP index calculation processing request """
 
-@api_view(['PUT', 'GET'])
+@api_view(['PUT'])
 def wup_index_generator(request):
     request_data = WUPIndexGeneratorRequest.from_dict(request.data)
     if not request_data.is_valid():
