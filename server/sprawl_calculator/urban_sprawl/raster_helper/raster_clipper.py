@@ -18,6 +18,25 @@ from qgis.core import (
 from ...urban_sprawl.common.common import Common
 
 
+class RasterClipperServer:
+    @staticmethod
+    def get_x_y_offset(
+        raster: gdal.Dataset, clipped_raster: gdal.Dataset, pixel_size: float,
+    ) -> Tuple[int, int]:
+        raster_geo_transform = Common.get_geo_transform(raster)
+        clipped_geo_transform = Common.get_geo_transform(clipped_raster)
+
+        x_index = int(
+            (raster_geo_transform.position_y - clipped_geo_transform.position_y)
+            / pixel_size
+        )
+        y_index = int(
+            (clipped_geo_transform.position_x - raster_geo_transform.position_x)
+            / pixel_size
+        )
+
+        return x_index, y_index
+
 class RasterClipper:
     @staticmethod
     def get_x_y_offset(
