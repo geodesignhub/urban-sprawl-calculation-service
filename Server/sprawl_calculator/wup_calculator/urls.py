@@ -1,6 +1,5 @@
 from django.urls import path
-from . import views
-
+from .views import wup_index_generator,index_calculation_status
 #Url for wup_index_generator and index_calculation_status
 urlpatterns = [
     path('v1/wup_index',wup_index_generator, name='wup_index_generator'),

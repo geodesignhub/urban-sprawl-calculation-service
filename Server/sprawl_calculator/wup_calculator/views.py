@@ -6,7 +6,7 @@ from datetime import datetime
 from dataclasses import asdict
 from .models import WUPCalculation
 from django.http import JsonResponse
-from .data_definations import WUPCalculationResult, WUPCalculationRequestActivating, WUPCalculationRequestProcessing, WUPCalculationRequestCompleted, WUPCalculationRequestRejected, WUPCalculationRequestError, WUPIndexGeneratorRequest
+from .data_definitions import WUPCalculationResult, WUPCalculationRequestActivating, WUPCalculationRequestProcessing, WUPCalculationRequestCompleted, WUPCalculationRequestRejected, WUPCalculationRequestError, WUPIndexGeneratorRequest
 # Create your views here.
 
 
@@ -69,6 +69,6 @@ def index_calculation_status(request, processing_id):
             updated_at=wup_calculation.updated_at
         )
 
-    return JsonResponse(asdict(response_data) status=status.HTTP_200_OK)
+    return JsonResponse(asdict(response_data), status=status.HTTP_200_OK)
     
 
