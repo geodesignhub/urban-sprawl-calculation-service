@@ -1,6 +1,6 @@
-from .urban_sprawl.clip_raster.raster_downloader import download_raster
-from .urban_sprawl.clip_raster.raster_operations import clip_raster_with_geojson
-from .urban_sprawl.dis.dis_calculator import DisCalculator
+from urban_sprawl.clip_raster.raster_downloader import download_raster
+from urban_sprawl.clip_raster.raster_operations import clip_raster_with_geojson
+from urban_sprawl.dis.dis_calculator import DisCalculator
 
 '''
 The "processAlgorithm" method is a part of the QGIS Processing Framework 
@@ -18,10 +18,8 @@ def processAlgorithm(url, geojson):
 	if dis_value == -1:
 		feedback.reportError("Unable to Properly calculate Si_Raster")
 		return -1.0
-	dis_field_index = vector.fields().indexOf("Dis")
-	vector.changeAttributeValue(
-		fid=feat.id(), field=dis_field_index, newValue=float(dis_value)
-	)
+
+	geojson_object['properties']['Dis'] = float(dis_value)
 
 	# 3.Run clip_raster_with_geojson() for the downloded raster and the geojson feature.
 	clipped_raster_file = clip_raster_with_geojson(raster_file, geojson)
