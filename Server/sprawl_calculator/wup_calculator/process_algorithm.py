@@ -1,5 +1,5 @@
-from urban_sprawl.clip_raster.raster_downloader import download_raster
-from urban_sprawl.clip_raster.raster_operations import clip_raster_with_geojson
+from urban_sprawl.raster_helper.raster_downloader import download_raster
+from urban_sprawl.raster_helper.raster_operations import clip_raster_with_geojson
 from urban_sprawl.dis.dis_calculator import DisCalculator
 
 '''
@@ -13,6 +13,8 @@ def processAlgorithm(url, geojson):
 	raster_file = download_raster(url)
 
 	# 2.Check and add the necessary fields to the vector layer, such as "Dis" and "settlement_area".
+
+
 	dis_calculator = DisCalculator(result_matrix)
 	dis_value = dis_calculator.calculate()
 	if dis_value == -1:
