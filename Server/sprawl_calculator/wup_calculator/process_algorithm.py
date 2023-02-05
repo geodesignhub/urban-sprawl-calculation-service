@@ -52,6 +52,6 @@ def processAlgorithm(url:str, geojson:GeoJSONFeature) -> WUPCalculationResult:
 	# 4.Calculate and save the DIS for each feature using the calculate_and_save_dis() method.
 	# 5.Calculate and save the WDIC for each feature using the calculate_and_save_wdis() method.
 	# 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
-	# 7.Return the results as a JSON object.
+	# 7.Return the results as a WUPCalculationResult object.
 
 	raise NotImplementedError
