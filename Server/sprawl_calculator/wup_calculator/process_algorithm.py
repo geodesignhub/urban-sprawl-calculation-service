@@ -47,11 +47,16 @@ def processAlgorithm(url:str, geojson:GeoJSONFeature) -> WUPCalculationResult:
 	geojson['properties']['Dis'] = float(dis_value)
 
 	# 3.Run clip_raster_with_geojson() for the downloded raster and the geojson feature.
-
+	clipped_raster_file = clip_raster_with_geojson(raster_file, geojson.feature)
 
 	# 4.Calculate and save the DIS for each feature using the calculate_and_save_dis() method.
-	# 5.Calculate and save the WDIC for each feature using the calculate_and_save_wdis() method.
-	# 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
-	# 7.Return the results as a WUPCalculationResult object.
+	dis_file = calculate_and_save_dis(result_matrix)
 
-	raise NotImplementedError
+	# 5.Calculate and save the WDIC for each feature using the calculate_and_save_wdis() method.
+	wdis_file = calculate_and_save_wdis(dis_file)
+
+	# 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
+	result = calculate(clipped_matrix, wdis_file)
+
+	# 7.Return the results as a WUPCalculationResult object.
+	return WUPCalculationResult(result['build_up_area'], result['settlement_area'])
