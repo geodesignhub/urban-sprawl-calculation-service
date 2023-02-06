@@ -35,7 +35,7 @@ def processAlgorithm(url:str, geojson:GeoJSONFeature) -> WUPCalculationResult:
 		pixel_size= pixel_size,
 		raster= raster,
 		clipped_raster_path=clipped_raster_file.name, 
-		si_lib = si_lib: 
+		si_lib = si_lib 
 	)
 
 	dis_calculator = DisCalculator(result_matrix)
@@ -59,4 +59,6 @@ def processAlgorithm(url:str, geojson:GeoJSONFeature) -> WUPCalculationResult:
 	result = calculate(clipped_matrix, wdis_file)
 
 	# 7.Return the results as a WUPCalculationResult object.
-	return WUPCalculationResult(result['build_up_area'], result['settlement_area'])
+	build_up_area = result['build_up_area']
+	settlement_area = result['settlement_area']
+	return WUPCalculationResult(build_up_area, settlement_area)
