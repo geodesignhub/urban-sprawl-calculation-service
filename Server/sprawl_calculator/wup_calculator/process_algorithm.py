@@ -47,7 +47,7 @@ def processAlgorithm(url:str, geojson:GeoJSONFeature) -> WUPCalculationResult:
 	geojson['properties']['Dis'] = float(dis_value)
 
 	# 3.Run clip_raster_with_geojson() for the downloded raster and the geojson feature.
-	clipped_raster_file = clip_raster_with_geojson(raster_file, geojson.feature)
+	clipped_raster_file = clip_raster_with_geojson(raster_file = raster_file, geojson_feature=geojson.feature)
 
 	# 4.Calculate and save the DIS for each feature using the calculate_and_save_dis() method.
 	dis_file = calculate_and_save_dis(result_matrix)
