@@ -1,11 +1,20 @@
 from dataclasses import dataclass
 from datetime import datetime
+from geojson import Feature
 
 @dataclass
 class WUPCalculationResult:
-	dis: float
-	lup: float
-	wup: float
+	Ud: float
+	Wud: float
+	Pba: float
+	Ts: float
+	Up: float
+	Wdis: float
+	Wup_a: float
+	Wup_b: float
+	Wspc: float
+	Dis: float
+	Lup: float
 
 @dataclass
 class WUPCalculationRequestActivating:
@@ -47,7 +56,29 @@ class WUPCalculationRequestError:
 class WUPIndexGeneratorRequest:
 	resident_count_in_boundary: int
 	employment_count_in_boundary: int
+	share_of_settlement_area:float
 	raster_with_build_up_area: str
 	raster_no_data_value: int
 	vector_boundary: str
 
+@dataclass
+class ErrorResponse: 
+	code: int
+	message: str
+
+
+@dataclass
+class GeoJSONFeature: 
+    feature: Feature
+
+@dataclass
+class AlgorithmProcessingParameters:
+	processing_id:str
+	share_of_settlement_area: float
+	resident_count_in_boundary: int
+	employment_count_in_boundary: int
+	raster_with_build_up_area: str
+	raster_no_data_value: int
+	raster_build_up_value: int
+	vector_boundary: GeoJSONFeature
+	

@@ -166,6 +166,7 @@ components:
       - raster_no_data_value
       - raster_build_up_value
       - vector_boundary
+      - share_of_settlement_area
       type: object
       properties:
         resident_count_in_boundary:
@@ -194,7 +195,16 @@ components:
           enum: [1]
           example: 1
           description: |-
-            Enter the build up value in the raster, normally 1, see the documentation regarding representing built up / non-built up areas in a raster
+            Enter the build up value in the raster, normally 1, see the documentation regarding representing built up / non-built up areas in a raster            
+        share_of_settlement_area:
+          type: number
+          minimum: 0
+          maximum:  1
+          enum: [1]
+          example: 0.5
+          description: |-
+            Enter the share of settlement area calculated as 1 - (Built up area / Area of reporting unit)
+
         vector_boundary:
           $ref: '#/components/schemas/Polygon'
 

@@ -40,3 +40,14 @@ class LupCalculator:
             if number_of_inhabitants and number_of_inhabitants > 0:
                 resident_employee_count += int(number_of_inhabitants)
         return resident_employee_count
+
+    @staticmethod
+    def verify_lup_input(
+        number_of_employees:int =0 , number_of_inhabitants:int=0) -> int:
+        resident_employee_count = 0
+    
+        if number_of_employees and number_of_employees > 0:
+            resident_employee_count += int(number_of_employees)
+        if number_of_inhabitants and number_of_inhabitants > 0:
+            resident_employee_count += int(number_of_inhabitants)
+        return resident_employee_count

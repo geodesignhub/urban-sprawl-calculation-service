@@ -40,6 +40,16 @@ def calculate_and_save_wup_a(
     )
     return wup_value
 
+def calculate_and_save_wup_a_server(
+    dis_value: float,
+    lup_value: float,
+    up_value: float,
+) -> float:
+    wup_calculator = WupCalculator(up_value, dis_value, lup_value)
+    wup_value = wup_calculator.calculate()
+   
+    return float(wup_value)
+
 
 def calculate_and_save_wup_b(
     feat: QgsFeature, parameters: Any, vector: QgsVectorLayer, wup_value: float,
@@ -55,6 +65,10 @@ def calculate_and_save_wup_b(
             fid=feat.id(), field=wup_b_field_index, newValue=float(wup_b_value),
         )
 
+def calculate_and_save_wup_b_server(wup_value: float, ssa_value:float) -> None:
+    if (ssa_value and 1 >= round(ssa_value, 5) >= 0):
+        wup_b_value = wup_value / (ssa_value)
+        return wup_b_value
 
 def calculate_wup_a_and_b(
     dis_value: float,
@@ -96,6 +110,20 @@ def calculate_and_save_wspc(
     )
 
 
+def calculate_and_save_wspc_server(
+    feature_area:float, 
+    resident_employee_count: int,
+    wup_value: float,
+
+) -> None:
+    wspc_calculator = WspcCalculator(
+        feature_area, resident_employee_count, wup_value
+    )
+    wspc_value = wspc_calculator.calculate()
+
+    return wspc_value
+
+
 def calculate_and_save_up(
     dis_value: float, feat: QgsFeature, pba_value: float, vector: QgsVectorLayer
 ) -> float:
@@ -104,6 +132,11 @@ def calculate_and_save_up(
     vector.changeAttributeValue(fid=feat.id(), field=up_field_index, newValue=up_value)
     return up_value
 
+
+def calculate_and_save_up_server(
+    dis_value: float, pba_value: float) -> float:
+    up_value = float(dis_value * pba_value)
+    return up_value
 
 def calculate_and_save_pba(
     build_up_area: float, feat: QgsFeature, vector: QgsVectorLayer
@@ -126,6 +159,12 @@ def calculate_and_save_wdis(
         field=wdis_field_index,
         newValue=float(get_weighted_dis(dis_value)),
     )
+
+
+def calculate_and_save_wdis_server(
+    dis_value: float
+) -> None:
+    return get_weighted_dis(dis_value)
 
 
 def calculate_and_save_ts(
@@ -157,6 +196,12 @@ def calculate_and_save_ud(
     )
     return ud_value
 
+def calculate_and_save_ud_server(
+    lup_value: float,) -> float:
+    ud_value = (1 / lup_value) * 1000000
+
+    return ud_value
+
 
 def calculate_and_save_wud(
     ud_value: float, feat: QgsFeature, vector: QgsVectorLayer
@@ -166,6 +211,9 @@ def calculate_and_save_wud(
         fid=feat.id(), field=wud_field_index, newValue=float(get_weighted_ud(ud_value)),
     )
 
+def calculate_and_save_wud_server(
+    ud_value: float) -> float:
+    return float(get_weighted_ud(ud_value))
 
 def calculate_and_save_lup(
     feat: QgsFeature,
@@ -185,6 +233,26 @@ def calculate_and_save_lup(
     )
 
     return lup_value, resident_employee_count
+
+def calculate_lup_server(
+    feat: QgsFeature,
+    feedback: QgsProcessingFeedback,
+    parameters: Any,
+    vector: QgsVectorLayer,
+    build_up_area: float,
+) -> Tuple[float, int]:
+    resident_employee_count = LupCalculator.check_lup_input(feat, feedback, parameters,)
+
+    lup_calculator = LupCalculator(build_up_area, resident_employee_count,)
+    lup_value = float(lup_calculator.calculate())
+    # Add Value to LUP field
+    lup_field_index = vector.fields().indexOf("Lup")
+    vector.changeAttributeValue(
+        fid=feat.id(), field=lup_field_index, newValue=lup_value
+    )
+
+    return lup_value, resident_employee_count
+
 
 
 def calculate_and_save_dis(
@@ -311,6 +379,42 @@ def get_output_path(parameters: Any, output_path: str, file: str) -> str:
 
 
 def calculate(
+    feat: QgsFeature,
+    vector: QgsVectorLayer,
+    build_up_area: float,
+    dis_value: float,
+    feedback: QgsProcessingFeedback,
+    parameters: Any,
+) -> None:
+    calculate_and_save_settlement_area(build_up_area, feat, vector)
+
+    calculate_and_save_ts(dis_value, build_up_area, feat, vector)
+
+    # Calculate LUP Value
+    (lup_value, resident_employee_count,) = calculate_and_save_lup(
+        feat, feedback, parameters, vector, build_up_area
+    )
+
+    ud_value = calculate_and_save_ud(lup_value, feat, vector)
+
+    calculate_and_save_wud(ud_value, feat, vector)
+
+    pba_value = calculate_and_save_pba(build_up_area, feat, vector)
+
+    up_value = calculate_and_save_up(dis_value, feat, pba_value, vector)
+
+    calculate_wup_a_and_b(
+        dis_value,
+        feat,
+        feedback,
+        lup_value,
+        parameters,
+        up_value,
+        vector,
+        resident_employee_count,
+    )
+
+def calculate_server(
     feat: QgsFeature,
     vector: QgsVectorLayer,
     build_up_area: float,

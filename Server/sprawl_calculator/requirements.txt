@@ -3,3 +3,5 @@ Django==4.1.5
 djangorestframework==3.14.0
 geojson==3.0.0
 gdal==3.6.2
+dacite==1.8.0
+geojson-area==1.1.1
