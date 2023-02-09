@@ -3,7 +3,7 @@ from datetime import datetime
 
 @dataclass
 class WUPCalculationResult:
-	dis: float
+	degree_of_urban_dispersion: float
 	lup: float
 	wup: float
 
