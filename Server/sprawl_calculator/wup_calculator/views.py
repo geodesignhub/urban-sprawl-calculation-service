@@ -11,6 +11,7 @@ from .models import WUPCalculation
 from django.http import JsonResponse
 from .data_definitions import WUPCalculationResult, WUPCalculationRequestActivating, WUPCalculationRequestProcessing, WUPCalculationRequestCompleted, WUPCalculationRequestRejected, WUPCalculationRequestError, WUPIndexGeneratorRequest, ErrorResponse, AlgorithmProcessingParameters
 from geojson import Feature, Polygon
+from .tasks import process_algorithm_async
 # Create your views here.
 
 
@@ -39,6 +40,8 @@ def wup_index_generator(request):
     algorithm_parameters = AlgorithmProcessingParameters(processing_id= str(w.id),share_of_settlement_area= request_data.share_of_settlement_area, resident_count_in_boundary=request_data.resident_count_in_boundary, employment_count_in_boundary= request_data.employment_count_in_boundary, raster_build_up_value=request_data.raster_build_up_value, raster_no_data_value= request_data.raster_no_data_value,  vector_boundary=f)
     # TODO: Make it async
     sprawl_index_generator.generate_sprawl_indices(parameters= algorithm_parameters)
+
+    process_algorithm_async.delay(url, geojson)
 
     activating_response = WUPCalculationRequestActivating(status='Activating',processing_id= uuid.uuid4(),created_at= w.created_at, updated_at= w.updated_at)
 
