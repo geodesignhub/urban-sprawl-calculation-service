@@ -16,17 +16,18 @@ from urban_sprawl.wup_processing import (
     calculate,
 )
 from osgeo import gdal
+import json
 
 app = Celery('tasks', broker='redis://localhost:8000')
 
 @app.task
-def process_algorithm_async(url:str, geojson:GeoJSONFeature):
+def process_algorithm_async(url:str, geojson_str:str):
     '''
     The "processAlgorithm" method is a part of the QGIS Processing Framework 
     and it is used to perform some action for processing a raster and a vector layer.
-    '''
-
-    def processAlgorithm(url:str, geojson:GeoJSONFeature) -> WUPCalculationResult:
+    ''' 
+        # convert GeoJSON string to Python object
+        geojson = json.loads(geojson_str)
 
         # 1.Get the downloaded file as input raster layer.
         raster_file = download_raster(url)

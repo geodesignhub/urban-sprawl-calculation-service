@@ -116,7 +116,7 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
     )
 	wspc_calculator = WspcCalculator(
 		area f_area, number_of_inhabitans_and_employees = resident_employee_count, wup = wup_value)
-	)
+	
 	wspc_value = wspc_calculator.calculate()
 	# 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
 	wup_result_calculation = WUPCalculationResult(Dis = dis_value, Ts = ts_value, Ud = ud_value, Wud=wud_value, Pba= pba_value, Up = up_value, Wdis= wdis_value,  Wup_a= wup_a_value, Wup_b = wup_b_value, Wspc=wspc_value, Lup = lup_value)
