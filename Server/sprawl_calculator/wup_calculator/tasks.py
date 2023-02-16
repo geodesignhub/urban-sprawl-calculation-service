@@ -32,7 +32,7 @@ def process_algorithm_async(url:str, geojson:GeoJSONFeature):
         raster_file = download_raster(url)
         raster = gdal.Open(raster_file)
         # Extract spatial metadata
-        # 2.Check and add the necessary fields to the vector layer, such as "Dis" and "settlement_area".
+        # 2.Check and add the necessary fields to the vector layer, such as "degree_of_urban_dispersion" and "settlement_area".
         clipped_raster_file = clip_raster_with_geojson(raster_file, geojson.feature)
         pixel_size = Common.get_pixel_size(raster)
         si_lib = get_si_lib()
@@ -43,22 +43,22 @@ def process_algorithm_async(url:str, geojson:GeoJSONFeature):
             si_lib = si_lib 
         )
 
-        dis_calculator = DisCalculator(result_matrix)
-        dis_value = dis_calculator.calculate()
-        if dis_value == -1:
+        degree_of_urban_dispersion_calculator = DisCalculator(result_matrix)
+        degree_of_urban_dispersion_value = degree_of_urban_dispersion_calculator.calculate()
+        if degree_of_urban_dispersion_value == -1:
             print("Unable to Properly calculate Si_Raster")
             return -1.0
 
-        geojson['properties']['Dis'] = float(dis_value)
+        geojson['properties']['degree_of_urban_dispersion'] = float(dis_value)
 
         # 3.Run clip_raster_with_geojson() for the downloded raster and the geojson feature.
         clipped_raster_file = clip_raster_with_geojson(raster_file = raster_file, geojson_feature=geojson.feature)
 
-        # 4.Calculate and save the DIS for each feature using the calculate_and_save_dis() method.
-        dis_file = calculate_and_save_dis(result_matrix)
+        # 4.Calculate and save the degree_of_urban_dispersion for each feature using the calculate_and_save_dis() method.
+        degree_of_urban_dispersion_file = calculate_and_save_dis(result_matrix)
 
         # 5.Calculate and save the WDIC for each feature using the calculate_and_save_wdis() method.
-        wdis_file = calculate_and_save_wdis(dis_file)
+        wdis_file = calculate_and_save_wdis(degree_of_urban_dispersion_file)
 
         # 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
         result = calculate(clipped_matrix, wdis_file)
