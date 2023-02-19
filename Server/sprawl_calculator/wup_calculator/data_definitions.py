@@ -13,7 +13,7 @@ class WUPCalculationResult:
 	Wup_a: float
 	Wup_b: float
 	Wspc: float
-	Dis: float
+	degree_of_urban_dispersion: float
 	Lup: float
 
 @dataclass
