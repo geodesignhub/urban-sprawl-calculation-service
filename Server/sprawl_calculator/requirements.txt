@@ -5,3 +5,4 @@ geojson==3.0.0
 gdal==3.6.2
 dacite==1.8.0
 geojson-area==1.1.1
+celery==5.2.7
