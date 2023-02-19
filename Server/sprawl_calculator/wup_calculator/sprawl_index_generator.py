@@ -26,7 +26,7 @@ from urban_sprawl.wup_processing import (
 
 '''
 The "processAlgorithm" method is a part of the QGIS Processing Framework 
-and it is used to perform some action for processing a raster and a vector layer.
+and it is used to perform some action for processing a raster and a vector layer. It is renamed to generate_sprawl_incices
 '''
 
 def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalculationResult:
