@@ -10,8 +10,8 @@ class WUPCalculationResult:
 	total_sprawl: float
 	Up: float
 	Wdis: float
-	Wup_a: float
-	Wup_b: float
+	weighted_urban_proliferation_a: float
+	weighted_urban_proliferation_b: float
 	weighted_sprawl_per_capita: float
 	degree_of_urban_dispersion: float
 	land_uptake_per_inhabitant: float
