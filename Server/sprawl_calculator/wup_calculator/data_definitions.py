@@ -12,7 +12,7 @@ class WUPCalculationResult:
 	Wdis: float
 	Wup_a: float
 	Wup_b: float
-	Wspc: float
+	weighted_sprawl_per_capita: float
 	degree_of_urban_dispersion: float
 	Lup: float
 
