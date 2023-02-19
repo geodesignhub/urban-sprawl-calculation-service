@@ -7,7 +7,7 @@ class WUPCalculationResult:
 	Ud: float
 	Wud: float
 	percentage_of_build_up_area: float
-	Ts: float
+	total_sprawl: float
 	Up: float
 	Wdis: float
 	Wup_a: float

@@ -85,7 +85,7 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
 	clipped_raster_file = clip_raster_with_geojson(raster_file = raster_file, geojson_feature=geojson.feature)
 	# 4.Calculate and save the DIS for each feature using the calculate_and_save_dis() method.
 	# We will not calculate this step this is calculate_and_save_settlement_area in the legacy QGIS version
-	# We will not calculate this step this is calculate_and_save_ts in the legacy QGIS version
+	# We will not calculate this step this is calculate_and_save_total_sprawl in the legacy QGIS version
 	ts_value = dis_value * built_up_area
 	
 	# calculate_and_save_lup 
@@ -119,7 +119,7 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
 	
 	wspc_value = wspc_calculator.calculate()
 	# 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
-	wup_result_calculation = WUPCalculationResult(Dis = dis_value, Ts = ts_value, Ud = ud_value, Wud=wud_value, percentage_of_build_up_area= pba_value, Up = up_value, Wdis= wdis_value,  Wup_a= wup_a_value, Wup_b = wup_b_value, Wspc=wspc_value, Lup = lup_value)
+	wup_result_calculation = WUPCalculationResult(Dis = dis_value, total_sprawl = ts_value, Ud = ud_value, Wud=wud_value, percentage_of_build_up_area = pba_value, Up = up_value, Wdis= wdis_value,  Wup_a= wup_a_value, Wup_b = wup_b_value, Wspc=wspc_value, Lup = lup_value)
 
 	# 7.Return the results as a WUPCalculationResult object.
 
