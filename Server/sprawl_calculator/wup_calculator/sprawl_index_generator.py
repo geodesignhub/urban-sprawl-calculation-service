@@ -85,7 +85,7 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
 	clipped_raster_file = clip_raster_with_geojson(raster_file = raster_file, geojson_feature=geojson.feature)
 	# 4.Calculate and save the DIS for each feature using the calculate_and_save_dis() method.
 	# We will not calculate this step this is calculate_and_save_settlement_area in the legacy QGIS version
-	# We will not calculate this step this is calculate_and_save_ts in the legacy QGIS version
+	# We will not calculate this step this is calculate_and_save_total_sprawl in the legacy QGIS version
 	ts_value = dis_value * built_up_area
 	
 	# calculate_and_save_lup 
@@ -98,7 +98,7 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
 	ud_value  = calculate_and_save_ud_server(lup_value = lup_value)
 	wud_value = calculate_and_save_wud_server(ud_value = ud_value)
 	
-	# calculate_and_save_pba
+	# calculate_and_save percentage_of_build_up_area
 	pba_calculator = PbaCalculator(built_up_area, feature_area)
 	pba_value = pba_calculator.calculate()
 	#calculate_and_save_up
@@ -115,15 +115,15 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
         feature_area = f_area, resident_employee_count = resident_employee_count, wup_value = wup_a_value
     )
 	wspc_calculator = WspcCalculator(
-		area f_area, number_of_inhabitans_and_employees = resident_employee_count, wup = wup_value)
-	)
+		area f_area, number_of_inhabitans_and_employees = resident_employee_count, weighted_urban_proliferation = wup_value)
+	
 	wspc_value = wspc_calculator.calculate()
 	# 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
-	wup_result_calculation = WUPCalculationResult(Dis = dis_value, Ts = ts_value, Ud = ud_value, Wud=wud_value, Pba= pba_value, Up = up_value, Wdis= wdis_value,  Wup_a= wup_a_value, Wup_b = wup_b_value, Wspc=wspc_value, Lup = lup_value)
+	wup_result_calculation = WUPCalculationResult(degree_of_urban_dispersion = dis_value, total_sprawl = ts_value, Ud = ud_value, Wud=wud_value, percentage_of_build_up_area = pba_value, Up = up_value, Wdis= wdis_value,  Wup_a= wup_a_value, Wup_b = wup_b_value, weighted_sprawl_per_capita = wspc_value, land_uptake_per_inhabitant = lup_value)
 
 	# 7.Return the results as a WUPCalculationResult object.
 
 	w.status = 'Completed'
 	w.save()
 
-	return WUPCalculationResult(dis=wup_result_calculation.dis,lup=wup_result_calculation.lup, wup=wup_result_calculation.Wspc)
+	return WUPCalculationResult(degree_of_urban_dispersion = wup_result_calculation.degree_of_urban_dispersion , land_uptake_per_inhabitant = wup_result_calculation.land_uptake_per_inhabitant, weighted_urban_proliferation = wup_result_calculation.weighted_sprawl_per_capita)

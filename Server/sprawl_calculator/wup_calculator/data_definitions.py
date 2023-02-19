@@ -6,15 +6,15 @@ from geojson import Feature
 class WUPCalculationResult:
 	Ud: float
 	Wud: float
-	Pba: float
-	Ts: float
+	percentage_of_build_up_area: float
+	total_sprawl: float
 	Up: float
 	Wdis: float
-	Wup_a: float
-	Wup_b: float
-	Wspc: float
+	weighted_urban_proliferation_a: float
+	weighted_urban_proliferation_b: float
+	weighted_sprawl_per_capita: float
 	degree_of_urban_dispersion: float
-	Lup: float
+	land_uptake_per_inhabitant: float
 
 @dataclass
 class WUPCalculationRequestActivating:
