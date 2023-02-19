@@ -119,11 +119,11 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
 	
 	wspc_value = wspc_calculator.calculate()
 	# 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
-	wup_result_calculation = WUPCalculationResult(Dis = dis_value, total_sprawl = ts_value, Ud = ud_value, Wud=wud_value, percentage_of_build_up_area = pba_value, Up = up_value, Wdis= wdis_value,  Wup_a= wup_a_value, Wup_b = wup_b_value, weighted_sprawl_per_capita = wspc_value, Lup = lup_value)
+	wup_result_calculation = WUPCalculationResult(Dis = dis_value, total_sprawl = ts_value, Ud = ud_value, Wud=wud_value, percentage_of_build_up_area = pba_value, Up = up_value, Wdis= wdis_value,  Wup_a= wup_a_value, Wup_b = wup_b_value, weighted_sprawl_per_capita = wspc_value, land_uptake_per_inhabitant = lup_value)
 
 	# 7.Return the results as a WUPCalculationResult object.
 
 	w.status = 'Completed'
 	w.save()
 
-	return WUPCalculationResult(dis=wup_result_calculation.dis,lup=wup_result_calculation.lup, wup=wup_result_calculation.weighted_sprawl_per_capita)
+	return WUPCalculationResult(dis=wup_result_calculation.dis, land_uptake_per_inhabitant = wup_result_calculation.land_uptake_per_inhabitant, wup = wup_result_calculation.weighted_sprawl_per_capita)

@@ -14,7 +14,7 @@ class WUPCalculationResult:
 	Wup_b: float
 	weighted_sprawl_per_capita: float
 	degree_of_urban_dispersion: float
-	Lup: float
+	land_uptake_per_inhabitant: float
 
 @dataclass
 class WUPCalculationRequestActivating:
