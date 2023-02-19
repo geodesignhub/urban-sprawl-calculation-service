@@ -6,7 +6,7 @@ from geojson import Feature
 class WUPCalculationResult:
 	Ud: float
 	Wud: float
-	Pba: float
+	percentage_of_build_up_area: float
 	Ts: float
 	Up: float
 	Wdis: float
