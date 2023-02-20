@@ -4,11 +4,11 @@ from geojson import Feature
 
 @dataclass
 class WUPCalculationResult:
-	Ud: float
-	Wud: float
+	urban_dispersion: float
+	weighted_urban_dispersion: float
 	percentage_of_build_up_area: float
 	total_sprawl: float
-	Up: float
+	degree_of_urban_permeation: float
 	Wdis: float
 	weighted_urban_proliferation_a: float
 	weighted_urban_proliferation_b: float
