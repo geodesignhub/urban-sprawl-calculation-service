@@ -7,7 +7,7 @@ import json
 import uuid
 from .models import WUPCalculation
 from django.http import JsonResponse
-from .data_definitions import WUPCalculationResult, WUPCalculationRequestActivating, WUPCalculationRequestProcessing, WUPCalculationRequestCompleted, WUPCalculationRequestRejected, WUPCalculationRequestError, WUPIndexGeneratorRequest, ErrorResponse, AlgorithmProcessingParameters,
+from .data_definitions import WUPCalculationResult, WUPCalculationRequestActivating, WUPCalculationRequestProcessing, WUPCalculationRequestCompleted, WUPCalculationRequestRejected, WUPCalculationRequestError, WUPIndexGeneratorRequest, ErrorResponse, AlgorithmProcessingParameters
 from geojson import Feature, Polygon
 from .tasks import process_algorithm_async
 # Create your views here.

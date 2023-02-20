@@ -5,7 +5,7 @@ import numpy
 from osgeo import gdal
 
 from ..common import constants
-from ...urban_sprawl.common.common import Common
+from urban_sprawl.common.common import Common
 
 
 class SiCalculator:

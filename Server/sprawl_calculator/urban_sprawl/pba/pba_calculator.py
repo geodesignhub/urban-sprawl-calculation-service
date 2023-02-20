@@ -1,4 +1,4 @@
-from qgis._core import QgsProcessingException
+# from qgis._core import QgsProcessingException
 
 
 class PbaCalculator:
@@ -11,7 +11,7 @@ class PbaCalculator:
         # Get PBA Value
         pba_value = self._build_up_area / self.whole_area
 
-        if pba_value < 0:
-            raise QgsProcessingException("PBA value needs to be between 0% and 100%")
+        # if pba_value < 0:
+        #     raise QgsProcessingException("PBA value needs to be between 0% and 100%")
 
         return min(pba_value, 1)

@@ -1,7 +1,7 @@
 from celery import Celery
 from wup_calculator.data_definitions import AlgorithmProcessingParameters
 import json
-from sprawl_index_generator import generate_sprawl_indices
+from .sprawl_index_generator import generate_sprawl_indices
 
 app = Celery('tasks', broker='redis://localhost:8000')
 

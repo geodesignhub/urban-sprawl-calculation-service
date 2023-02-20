@@ -3,7 +3,7 @@ import re
 from osgeo import gdal
 import numpy
 
-from qgis.core import QgsFeature
+# from qgis.core import QgsFeature
 
 from ..common import constants
 from ..common.gdal_geo_transform import GdalGeoTransform
@@ -49,14 +49,14 @@ class Common:
 
         return (pixel_size ** 2) * count
 
-    @staticmethod
-    def get_clipped_raster_name(parameters: Any, feature: QgsFeature) -> str:
-        feature_name = ""
-        if (
-            parameters[constants.NAME_FIELD]
-            and feature[parameters[constants.NAME_FIELD]]
-        ):
-            feature_name = re.sub(
-                "[/,\\\\ .]", "_", str(feature[parameters[constants.NAME_FIELD]])
-            )
-        return feature_name
+    # @staticmethod
+    # def get_clipped_raster_name(parameters: Any, feature: QgsFeature) -> str:
+    #     feature_name = ""
+    #     if (
+    #         parameters[constants.NAME_FIELD]
+    #         and feature[parameters[constants.NAME_FIELD]]
+    #     ):
+    #         feature_name = re.sub(
+    #             "[/,\\\\ .]", "_", str(feature[parameters[constants.NAME_FIELD]])
+    #         )
+    #     return feature_name

@@ -4,12 +4,12 @@ from osgeo import gdal
 from area import area
 from .models import WUPCalculation
 
-from .urban_sprawl.dis.dis_calculator import DisCalculator
-from .urban_sprawl.lup.lup_calculator import LupCalculator
-from .urban_sprawl.pba.pba_calculator import PbaCalculator
+from urban_sprawl.dis.dis_calculator import DisCalculator
+from urban_sprawl.lup.lup_calculator import LupCalculator
+from urban_sprawl.pba.pba_calculator import PbaCalculator
 
-from .urban_sprawl.wup.wup_calculator import WupCalculator
-from .urban_sprawl.wspc.wspc_calculator import WspcCalculator
+from urban_sprawl.wup.wup_calculator import WupCalculator
+from urban_sprawl.wspc.wspc_calculator import WspcCalculator
 from urban_sprawl.common.common import Common
 from .data_definitions import AlgorithmProcessingParameters,  WUPCalculationResult
 from urban_sprawl.wup_processing import (
@@ -115,11 +115,11 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
         feature_area = f_area, resident_employee_count = resident_employee_count, wup_value = weighted_urban_proliferation_a_value
     )
 	weighted_urban_sprawl_per_capita_calculator = WspcCalculator(
-		area f_area, number_of_inhabitans_and_employees = resident_employee_count, weighted_urban_proliferation = weighted_urban_proliferation_value)
+		area =f_area, number_of_inhabitans_and_employees = resident_employee_count, weighted_urban_proliferation = weighted_urban_proliferation_a_value)
 	
 	weighted_urban_sprawl_per_capita_value = weighted_urban_sprawl_per_capita_calculator.calculate()
 	# 6.Use the calculate() method to calculate the build-up area and settlement area for each feature.
-	weighted_urban_proliferation_result_calculation = WUPCalculationResult(degree_of_urban_dispersion = degree_of_urban_dispersion_value, total_sprawl = total_sprawl_value, urban_dispersion = urban_dispersion_value, weighted_urban_dispersion=weighted_urban_dispersion_value, percentage_of_build_up_area = percentage_of_build_up_area_value, degree_of_urban_permeation = degree_of_urban_permeation_value, weighted_urban_dispersion= weighted_degree_of_urban_dispersion_value,  weighted_urban_proliferation_a= weighted_urban_proliferation_a_value, weighted_urban_proliferation_b = weighted_urban_proliferation_b_value, weighted_sprawl_per_capita = weighted_urban_sprawl_per_capita_value, land_uptake_per_inhabitant = land_uptake_per_inhabitant_value)
+	weighted_urban_proliferation_result_calculation = WUPCalculationResult(degree_of_urban_dispersion = degree_of_urban_dispersion_value, total_sprawl = total_sprawl_value, urban_dispersion = urban_dispersion_value, weighted_urban_dispersion=weighted_urban_dispersion_value, percentage_of_build_up_area = percentage_of_build_up_area_value, degree_of_urban_permeation = degree_of_urban_permeation_value, weighted_degree_of_urban_dispersion= weighted_degree_of_urban_dispersion_value,  weighted_urban_proliferation_a= weighted_urban_proliferation_a_value, weighted_urban_proliferation_b = weighted_urban_proliferation_b_value, weighted_sprawl_per_capita = weighted_urban_sprawl_per_capita_value, land_uptake_per_inhabitant = land_uptake_per_inhabitant_value)
 
 	# 7.Return the results as a WUPCalculationResult object.
 
