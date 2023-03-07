@@ -40,7 +40,7 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
 	raster_no_data_value = parameters.raster_no_data_value
 	raster_build_up_value = parameters.raster_build_up_value
 
-	w = WUPCalculation.object.get(id = processing_id)
+	w = WUPCalculation.objects.get(id = processing_id)
 	w.status = 'Activating'
 	w.save()
 

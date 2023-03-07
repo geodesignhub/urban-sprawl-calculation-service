@@ -53,15 +53,6 @@ class WUPCalculationRequestError:
 	updated_at: datetime
 
 @dataclass
-class WUPIndexGeneratorRequest:
-	resident_count_in_boundary: int
-	employment_count_in_boundary: int
-	share_of_settlement_area:float
-	raster_with_build_up_area: str
-	raster_no_data_value: int
-	vector_boundary: str
-
-@dataclass
 class ErrorResponse: 
 	code: int
 	message: str
@@ -72,6 +63,16 @@ class GeoJSONFeature:
     feature: Feature
 
 @dataclass
+class WUPIndexGeneratorRequest:
+	resident_count_in_boundary: int
+	employment_count_in_boundary: int
+	share_of_settlement_area:float
+	raster_with_build_up_area: str
+	raster_no_data_value: int
+	raster_build_up_value: int
+	vector_boundary: GeoJSONFeature
+
+@dataclass
 class AlgorithmProcessingParameters:
 	processing_id:str
 	share_of_settlement_area: float
@@ -80,5 +81,5 @@ class AlgorithmProcessingParameters:
 	raster_with_build_up_area: str
 	raster_no_data_value: int
 	raster_build_up_value: int
-	vector_boundary: GeoJSONFeature
+	vector_boundary: dict
 	
