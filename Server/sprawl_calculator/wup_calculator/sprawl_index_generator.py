@@ -2,8 +2,9 @@ from urban_sprawl.raster_helper.raster_downloader import download_raster
 from urban_sprawl.raster_helper.raster_operations import clip_raster_with_geojson
 from osgeo import gdal
 from area import area
+from geojson import Feature, Polygon
 from .models import WUPCalculation
-
+from .data_definitions import GeoJSONFeature
 from urban_sprawl.dis.dis_calculator import DisCalculator
 from urban_sprawl.lup.lup_calculator import LupCalculator
 from urban_sprawl.pba.pba_calculator import PbaCalculator
@@ -34,7 +35,11 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
 	processing_id = parameters.processing_id
 	raster_url = parameters.raster_with_build_up_area
 	built_up_area = parameters.share_of_settlement_area
-	geojson = parameters.vector_boundary
+	geojson_raw = parameters.vector_boundary
+	p = Polygon(coordinates=geojson_raw['geometry']['coordinates'])
+	f = Feature(geometry=p, properties={})
+	geojson = GeoJSONFeature(feature = f)
+
 	resident_count_in_boundary = parameters.resident_count_in_boundary
 	employment_count_in_boundary = parameters.employment_count_in_boundary
 	raster_no_data_value = parameters.raster_no_data_value
@@ -61,10 +66,17 @@ def generate_sprawl_indices(parameters:AlgorithmProcessingParameters) -> WUPCalc
 		w.status = 'Error'
 		w.save()
 		return
-		
+
 	# Extract spatial metadata
 	# 2.Check and add the necessary fields to the vector layer, such as "Dis" and "settlement_area".
-	clipped_raster_file = clip_raster_with_geojson(raster_file, geojson.feature)
+	try: 
+		clipped_raster_file = clip_raster_with_geojson(raster_file, geojson)
+	except Exception as e:
+		# Error in clipping the raster
+		w.status = 'Error'
+		w.save()
+		return
+
 	pixel_size = Common.get_pixel_size(raster)
 	si_lib = get_si_lib()
 	clipped_matrix, clipped_raster, result_matrix = get_si_raster_server(	

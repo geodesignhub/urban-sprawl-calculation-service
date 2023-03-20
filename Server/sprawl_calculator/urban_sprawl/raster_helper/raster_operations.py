@@ -6,9 +6,10 @@ import json
 
 def clip_raster_with_geojson(raster_file: NamedTemporaryFile, geojson:GeoJSONFeature) -> NamedTemporaryFile:
 	gj = geojson.feature
+	
 	# load the raster, mask it by the polygon and crop it
 	with rasterio.open(raster_file) as src:
-		out_image, out_transform = mask(src, json.loads(geojson.dumps(gj)), crop=True)
+		out_image, out_transform = mask(dataset= src,shapes = [gj['geometry']], crop=True)
 		out_meta = src.meta.copy()
 
 	# save the resulting raster  
