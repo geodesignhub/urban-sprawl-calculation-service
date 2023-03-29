@@ -2,14 +2,21 @@ from dataclasses import dataclass
 from datetime import datetime
 from geojson import Feature
 
+
 @dataclass
 class WUPCalculationResult:
+	weighted_sprawl_per_capita: float
+	degree_of_urban_dispersion: float
+	land_uptake_per_inhabitant: float
+
+@dataclass
+class WUPCalculationResultFull:
 	urban_dispersion: float
 	weighted_urban_dispersion: float
 	percentage_of_build_up_area: float
 	total_sprawl: float
 	degree_of_urban_permeation: float
-	Wdis: float
+	weighted_degree_of_urban_dispersion: float
 	weighted_urban_proliferation_a: float
 	weighted_urban_proliferation_b: float
 	weighted_sprawl_per_capita: float
